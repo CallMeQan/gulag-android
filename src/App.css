@@ -1,19 +1,17 @@
-.logo.vite:hover {
-  filter: drop-shadow(0 0 2em #747bff);
+
+/* Reset stuff for better design */
+body{
+  /* Reset */
+  padding: 0;
+  margin: 0;
 }
 
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafb);
-}
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
-
-  color: #0f0f0f;
-  background-color: #f6f6f6;
-
+  background-color: #2b2b2b;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -22,8 +20,7 @@
 }
 
 .container {
-  margin: 0;
-  padding-top: 10vh;
+  margin: 0 0 0 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -31,36 +28,76 @@
   gap:10px;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: 0.75s;
-}
-
-.logo.tauri:hover {
-  filter: drop-shadow(0 0 2em #24c8db);
-}
-
-.row {
+/* Title Box */
+.title-box{
   display: flex;
   justify-content: center;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-
-a:hover {
-  color: #535bf2;
+  align-items: center;
+  background-color: #ff4141;
+  height: 90px;
+  border-radius: 0 0 50px 50px;
+  margin-bottom: 5px;
 }
 
 h1 {
   text-align: center;
+  font-size: 2rem;
+  color: white;
 }
 
+/* Content Box */
+.content-box{
+  margin: 0 10px 0 10px;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  height: 100%  ;
+  border-radius: 30px;
+  padding: 15px 20px 15px 20px;
+}
+
+/* GPS style */
+.gps-switch-box {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 5px;
+}
+
+.gps-log-panel{
+  border: 2px solid #ccc;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: flex-start;
+  padding: 0 10px 0 10px;
+}
+
+/* Websocket panel */
+
+.websocket-setting-panel{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Console panel */
+.console-panel{
+  height: 35vh;
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.console-panel textarea{
+  font-size: 11px;
+  border-radius: 10px;
+  color: #16C60C;
+  background-color: #0C0C0C;
+}
+
+/* Elements styling */
 button {
   border-radius: 8px;
   border: 1px solid #acb1f1;
@@ -88,7 +125,6 @@ button {
 input[type="text"], input[type="password"] {
   background-color: #ffffff;
   height: 10px;
-  margin-bottom: 10px;
   border-radius: 8px;
   border: 1px solid black;
   padding: 0.6em 1.2em;
@@ -137,15 +173,6 @@ button {
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    color: #f6f6f6;
-    background-color: #2f2f2f;
-  }
-
-  a:hover {
-    color: #24c8db;
-  }
-
   input,
   button {
     color: #ffffff;

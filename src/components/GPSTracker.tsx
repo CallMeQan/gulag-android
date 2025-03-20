@@ -4,15 +4,24 @@ import WebSocket from "@tauri-apps/plugin-websocket";
 interface GpsTrackerProps {
     socket: WebSocket | null;
     onGpsUpdate: (latitude: number, longitude: number, accuracy: number) => void;
-    onLogMessage: (message: string) => void;
+    logger: (message: string) => void;
 }
 
-export default function GpsTracker({ socket, onGpsUpdate, onLogMessage }: GpsTrackerProps) {
+export default function GpsTracker({ socket, onGpsUpdate, logger }: GpsTrackerProps) {
     const [isTracking, setIsTracking] = useState(false);
     // @ts-ignore
     const [gpsInterval, setGpsInterval] = useState<NodeJS.Timeout | null>(null);
 
+    const stopTracking = () => {
+        if (gpsInterval) clearInterval(gpsInterval);
+        setGpsInterval(null);
+        setIsTracking(false);
+        onGpsUpdate(0,0,0);
+        logger("GPS Stop");
+    };
+
     const startTracking = () => {
+        if (isTracking) stopTracking(); // block unexpect bug happen
         if ("geolocation" in navigator) {
             const interval = setInterval(() => {
                 navigator.geolocation.getCurrentPosition(
@@ -22,16 +31,18 @@ export default function GpsTracker({ socket, onGpsUpdate, onLogMessage }: GpsTra
                         const acc = position.coords.accuracy;
 
                         onGpsUpdate(lat, lng, acc);
-                        onLogMessage("GPS Updated");
-
                         if (socket) {
                             const gpsData = JSON.stringify({ latitude: lat, longitude: lng, accuracy: acc });
-                            socket.send(gpsData).then(() => console.log("GPS Sent"));
+                            socket.send(gpsData).then(() => {
+                                console.log("GPS Sent");
+                                logger("GPS Sent");
+                            });
                         }
                     },
                     (error) => {
+                        onGpsUpdate(0,0,0);
                         console.error("Error getting location:", error);
-                        onLogMessage("Failed to get GPS location.");
+                        logger("Failed to get GPS location.");
                     },
                     { enableHighAccuracy: true, timeout: 10000 }
                 );
@@ -40,19 +51,9 @@ export default function GpsTracker({ socket, onGpsUpdate, onLogMessage }: GpsTra
             setGpsInterval(interval);
             setIsTracking(true);
         } else {
-            onLogMessage("Geolocation is not supported by your browser.");
+            logger("Geolocation is not supported by your browser.");
         }
     };
 
-    const stopTracking = () => {
-        if (gpsInterval) clearInterval(gpsInterval);
-        setGpsInterval(null);
-        setIsTracking(false);
-    };
-
-    const toggleTracking = () => {
-        isTracking ? stopTracking() : startTracking();
-    };
-
-    return { isTracking, toggleTracking };
+    return { startTracking, stopTracking };
 }

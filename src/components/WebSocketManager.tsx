@@ -3,25 +3,28 @@ import WebSocket from "@tauri-apps/plugin-websocket";
 
 interface WebSocketManagerProps {
     wsUrl: string;
-    onMessage: (msg: string) => void;
+    logger: (msg: string) => void;
 }
 
-export default function WebSocketManager({ wsUrl, onMessage }: WebSocketManagerProps) {
+export default function WebSocketManager({ wsUrl, logger }: WebSocketManagerProps) {
     const [socket, setSocket] = useState<WebSocket | null>(null);
 
     const connectWebSocket = async () => {
         if (socket) await socket.disconnect();
         const ws = await WebSocket.connect(wsUrl);
         if (!ws) {
-            onMessage("Failed to connect to WebSocket");
+            logger("Failed to connect to WebSocket");
             return;
         }
         ws.addListener((msg) => {
-            if (msg.type === "Text") {
-                onMessage(msg.data);
-            } else if (msg.type === "Close") {
-                onMessage(`${msg.data?.code} ${msg.data?.reason}`);
+            if (msg.type === "Close") {
+                logger(`${msg.data?.code} ${msg.data?.reason}`);
                 setSocket(null);
+            }else if(msg.type === "Ping") {
+                ws.send({type: "Pong", data: msg.data});
+            }
+            else{
+                logger(`Websocket ${msg.type.toString()}: ${msg.data.toString()}`)
             }
         });
         setSocket(ws);
