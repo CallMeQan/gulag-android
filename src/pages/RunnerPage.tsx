@@ -44,6 +44,8 @@ export default function RunnerPage() {
                     navigator.geolocation.getCurrentPosition(
                         (position) => {
                             const data = {
+                                email: email,
+                                password: password,
                                 latitude: position.coords.latitude,
                                 longitude: position.coords.longitude,
                                 accuracy: position.coords.accuracy,
