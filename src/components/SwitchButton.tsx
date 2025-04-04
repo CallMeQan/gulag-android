@@ -1,22 +1,22 @@
-import './SwitchButtonCSS.css'
-import React from "react";
+import "./SwitchButtonCSS.css";
+import { Label } from "./ui/label";
+import { Switch } from "./ui/switch";
 
 interface SwitchButtonProps {
     onSuccess: () => void;
     onFailure: () => void;
 }
 
-export default function SwitchButton({onFailure, onSuccess}: SwitchButtonProps) {
-
-    const onSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if(e.target.checked)onSuccess();
-        else onFailure();
-    }
-
+export default function SwitchButton({ onFailure, onSuccess }: SwitchButtonProps) {
     return (
-        <label className="switch">
-            <input type="checkbox" onChange={onSwitchChange}/>
-            <span className="slider"></span>
-        </label>
-    )
+        <div className="switch">
+            <Label>GPS Tracker</Label>
+            <Switch
+                onCheckedChange={(e) => {
+                    if (e) onSuccess();
+                    else onFailure();
+                }}
+            />
+        </div>
+    );
 }

@@ -46,7 +46,7 @@ export default function GpsTracker({ socket, onGpsUpdate, logger }: GpsTrackerPr
                     },
                     { enableHighAccuracy: true, timeout: 10000 }
                 );
-            }, 500);
+            }, 2000);
 
             setGpsInterval(interval);
             setIsTracking(true);

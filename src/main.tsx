@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import { checkPermissions, requestPermissions } from "@tauri-apps/plugin-geolocation";
 
-const WEB_DEBUG = false;
+const WEB_DEBUG = true;
 
 async function startApp() {
     let permissions = await checkPermissions();
