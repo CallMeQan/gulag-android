@@ -86,6 +86,8 @@ export default function RunnerPage() {
     return (
         <div>
             <h1 className="text-4xl font-bold mb-8 text-red-800">Gulag Runner</h1>
+
+            {/* Email + Password Inputs, will be deleted soon */}
             <div className="w-full max-w-md mb-6">
                 <div className="flex gap-2">
                     <Label className="block text-2xl mb-2">Email</Label>
