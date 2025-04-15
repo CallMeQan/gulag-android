@@ -24,6 +24,7 @@ export default function LoginPage() {
             await login(values.email, values.password);
         } catch (error) {
             form.setError("email", { message: "Invalid email or password" });
+            form.setError("password", { message: undefined });
         }
     }
 
