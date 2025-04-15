@@ -13,3 +13,7 @@ export function getTimeBetter() {
 export function log(msg: string) {
     return `[${getTimeBetter().slice(11, -1)}]`.concat(" ", msg);
 }
+
+export function getHostnameAndPort() {
+    return "42.114.88.18:32400";
+}
