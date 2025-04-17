@@ -1,8 +1,10 @@
+import { getHostnameAndPort } from '@/lib/utils';
+import { fetch } from '@tauri-apps/plugin-http';
 import { createContext, useContext, useState, ReactNode } from 'react';
 
 type AuthData = {
-    email: string;
-    hashed_token: string;
+    user_id: string;
+    hashed_timestamp: string;
 };
 
 type AuthContextType = {
@@ -17,8 +19,9 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<AuthData | null>(null);
 
     const login = async (email: string, password: string) => {
-        const response = await fakeServerLogin(email, password);
-        setUser({ email, hashed_token: response.hashed_token });
+        const response = await login_logic(email, password);
+        console.log(response);
+        setUser({ user_id: response.user_id, hashed_timestamp: response.hashed_timestamp });
     };
 
     const logout = () => {
@@ -32,17 +35,28 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     );
 };
 
-const fakeServerLogin = async (email: string, password: string) => {
-    return new Promise<{ hashed_token: string }>((resolve, reject) => {
-        setTimeout(() => {
-            if (email === "admin@example.com" && password === "password123") {
-                resolve({ hashed_token: btoa(email + ':' + password) });
-            } else {
-                reject(new Error("Invalid email or password"));
-            }
-        }, 1000);
-    });
+const login_logic = async (email: string, password: string) => {
+    const url = `http://${getHostnameAndPort()}/auth/mobile_check`;
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({ email, password }).toString(),
+        });
+
+        if (response.status !== 200) {
+            throw new Error('Login failed');
+        }
+        console.log("Server responded:", response);
+        return response.json();
+    } catch (error) {
+        console.error('Error during login:', error);
+        throw error;
+    }
 };
+
 
 
 const useAuth = () => {

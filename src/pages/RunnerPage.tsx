@@ -7,6 +7,7 @@ import { socket } from "@/lib/socket";
 
 export default function RunnerPage() {
     const [gpsEnabled, setGpsEnabled] = useState(false);
+    const [timeStart, setTimeStart] = useState<number | null>(null);
     const [isConnected, setIsConnected] = useState(false);
     const gpsInterval = useRef<NodeJS.Timeout | null>(null);
 
@@ -14,7 +15,10 @@ export default function RunnerPage() {
 
     // Handle manual connection
     const handleReload = () => {
-        if (!socket.connected) socket.connect();
+        if (!socket.connected) {
+            socket.connect();
+            setIsConnected(true);
+        }
     };
 
     // Connection listeners
@@ -45,12 +49,11 @@ export default function RunnerPage() {
                     navigator.geolocation.getCurrentPosition(
                         (position) => {
                             const data = {
-                                email: user?.email,
-                                hashed_token: user?.hashed_token,
+                                hashed_timestamp: user?.hashed_timestamp,
                                 latitude: position.coords.latitude,
                                 longitude: position.coords.longitude,
-                                accuracy: position.coords.accuracy,
-                                timestamp: new Date().toISOString(),
+                                time_start: timeStart,
+                                created_at: new Date().toISOString(),
                             };
                             console.log(log("GPS Data: " + JSON.stringify(data)));
 
@@ -77,6 +80,9 @@ export default function RunnerPage() {
     }, [gpsEnabled]);
 
     const handleGpsToggle = () => {
+        if (timeStart === null) {
+            setTimeStart(Math.floor(Date.now() / 1000));
+        }
         if (!gpsEnabled) {
             setGpsEnabled(true);
         } else {

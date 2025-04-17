@@ -1,19 +1,11 @@
-import LoginPage from '@/pages/LoginPage'
-import RunnerPage from '@/pages/RunnerPage'
+import LoginPage from '@/pages/LoginPage';
+import RunnerPage from '@/pages/RunnerPage';
 import ThemeProvider from '@/components/theme-provider';
-import { AuthProvider, useAuth } from "@/components/AuthContext";
-import './App.css'
-
-function AppWrapper() {
-    return (
-        <AuthProvider>
-            <App />
-        </AuthProvider>
-    );
-}
+import { useAuth } from "@/components/AuthContext";
+import './App.css';
 
 function App() {
-    const { user } = useAuth(); // use context instead of isLogin
+    const { user } = useAuth();
 
     return (
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -22,4 +14,4 @@ function App() {
     );
 }
 
-export default AppWrapper
+export default App;
