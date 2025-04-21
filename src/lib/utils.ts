@@ -15,5 +15,5 @@ export function log(msg: string) {
 }
 
 export function getHostnameAndPort() {
-    return "42.114.88.18:8000";
+    return "1.55.191.3:8000";
 }

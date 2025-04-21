@@ -4,6 +4,7 @@ import { log } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/AuthContext";
 import { socket } from "@/lib/socket";
+import post_to_server from "@/lib/axios_manually";
 
 export default function RunnerPage() {
     const [gpsEnabled, setGpsEnabled] = useState(false);
@@ -57,9 +58,7 @@ export default function RunnerPage() {
                             };
                             console.log(log("GPS Data: " + JSON.stringify(data)));
 
-                            if (socket.connected) {
-                                socket.emit('updated_info_on_room', data);
-                            }
+                            post_to_server(data);
                         },
                         (error) => {
                             console.log(log("GPS Error: " + error.message));
